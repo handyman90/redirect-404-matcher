@@ -3,7 +3,7 @@
  * Plugin Name: 404 Redirect Matcher Pro
  * Plugin URI: https://zhrventure.com
  * Description: Automatically redirect 404 errors to the best matching post or page using smart slug matching. Pro version includes broken image fallback, custom 404 redirect, and license key activation.
- * Version: 1.3c
+ * Version: 1.3d
  * Author: Handyman
  * Author URI: https://zhrventure.com
  * License: GPLv2 or later
