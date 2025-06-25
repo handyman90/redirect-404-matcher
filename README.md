@@ -5,7 +5,7 @@ Smart 404 handling for WordPress — automatically redirects visitors from broke
 **Pro features include:**
 - Custom fallback 404 URL
 - Default image replacement for missing media
-- License-ready structure (currently dummy)
+- License-ready structure (currently uses a demo key)
 
 ---
 
@@ -33,14 +33,28 @@ Smart 404 handling for WordPress — automatically redirects visitors from broke
 
 - Enable redirect matching.
 - Select the post types to match against.
-- (Optional) Enter a fallback 404 page URL or image replacement (Pro).
+- (Pro) Enter a fallback 404 page URL or default image URL.
+- (Pro) Activate using the demo license key below.
+
+---
+
+## 🔑 Demo License Key
+
+This version includes basic Pro features for demo/testing.  
+To enable Pro-only settings, use this demo license key:
+
+12345678
+
+
+> 🔐 This key is a placeholder and does not connect to any external validation service.  
+> Future releases may use secure validation for official licenses.
 
 ---
 
 ## 🧪 Multisite Support
 
 If the plugin is **network-activated**, settings are shared across all sites using WordPress site options.  
-Otherwise, settings are stored per-site.
+If activated per site, each site stores its own configuration.
 
 ---
 
@@ -72,10 +86,11 @@ We’d love to hear your thoughts!
 💡 Have ideas or issues?  
 📧 Email: [dev@zhrventure.com](mailto:dev@zhrventure.com)
 
+Appreciate any feedback or ideas for improvements!
+
 ---
 
 ## 📄 License
 
 GPL v2.0 or later  
 See [`LICENSE`](./LICENSE) for full terms.
-
