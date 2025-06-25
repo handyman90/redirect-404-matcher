@@ -10,17 +10,18 @@ add_action('admin_menu', function() {
 });
 
 add_action('admin_init', function() {
-    register_setting('r4mp_settings_group', 'r4mp_enabled');
-    register_setting('r4mp_settings_group', 'r4mp_post_types');
-    register_setting('r4mp_image_group', 'r4mp_default_image_url');
-    register_setting('r4mp_404_group', 'r4mp_custom_404_url');
-    register_setting('r4mp_license_group', 'r4mp_license_key');
+    register_setting('r4mp_settings_group', 'r4mp_enabled', 'absint');
+    register_setting('r4mp_settings_group', 'r4mp_post_types', function($value) {
+        return is_array($value) ? array_map('sanitize_text_field', $value) : [];
+    });
+    register_setting('r4mp_image_group', 'r4mp_default_image_url', 'esc_url_raw');
+    register_setting('r4mp_404_group', 'r4mp_custom_404_url', 'esc_url_raw');
+    register_setting('r4mp_license_group', 'r4mp_license_key', 'sanitize_text_field');
 });
 
 if (!function_exists('r4mp_is_pro_active')) {
     function r4mp_is_pro_active() {
-        $key = trim(get_option('r4mp_license_key'));
-        return $key === '12345678'; // Replace with real license logic if needed
+        return get_option('r4mp_license_key') === '12345678';
     }
 }
 
@@ -114,25 +115,20 @@ if (!function_exists('r4mp_license_page')) {
     }
 }
 
-if (!function_exists('r4mp_output_image_fallback_script')) {
-    function r4mp_output_image_fallback_script() {
-        $default_img = esc_url(get_option('r4mp_default_image_url', ''));
-        if ($default_img) {
-            echo "<script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    document.querySelectorAll('img').forEach(function(img) {
-                        img.onerror = function() {
-                            if (!this.dataset.r4mpDefault) {
-                                this.dataset.r4mpDefault = true;
-                                this.src = '{$default_img}';
-                            }
-                        };
-                    });
+if (r4mp_is_pro_active()) add_action('wp_head', function() {
+    $default_img = esc_url(get_option('r4mp_default_image_url', ''));
+    if ($default_img) {
+        echo "<script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('img').forEach(function(img) {
+                    img.onerror = function() {
+                        if (!this.dataset.r4mpDefault && this.src.startsWith(window.location.origin)) {
+                            this.dataset.r4mpDefault = true;
+                            this.src = '{$default_img}';
+                        }
+                    };
                 });
-            </script>";
-        }
+            });
+        </script>";
     }
-}
-if (r4mp_is_pro_active()) {
-    add_action('wp_head', 'r4mp_output_image_fallback_script');
-}
+});
