@@ -27,7 +27,7 @@ Pro features include broken image fallback, custom 404 redirection, and license 
 1. Download or clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/redirect-404-matcher.git
+   git clone https://github.com/handyman90/redirect-404-matcher.git
    ```
 
 2. Upload the plugin folder to your WordPress plugins directory:
