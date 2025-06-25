@@ -3,7 +3,7 @@
  * Plugin Name: 404 Redirect Matcher Pro
  * Plugin URI: https://zhrventure.com
  * Description: Automatically redirect 404 errors to the best matching post or page using smart slug matching. Pro version includes broken image fallback, custom 404 redirect, and license key activation.
- * Version: 1.3
+ * Version: 1.3a
  * Author: Handyman
  * Author URI: https://zhrventure.com
  * License: GPLv2 or later
@@ -14,12 +14,11 @@
 
 if (!defined('ABSPATH')) exit;
 
-// Load admin settings
-require_once plugin_dir_path(__FILE__) . 'settings.php';
-
-add_action('template_redirect', 'r4mp_redirect_partial_404_match');
-
 if (!function_exists('r4mp_redirect_partial_404_match')) {
+    require_once plugin_dir_path(__FILE__) . 'settings.php';
+
+    add_action('template_redirect', 'r4mp_redirect_partial_404_match');
+
     function r4mp_redirect_partial_404_match() {
         if (!is_404()) return;
         if (!get_option('r4mp_enabled', true)) return;
@@ -46,23 +45,24 @@ if (!function_exists('r4mp_redirect_partial_404_match')) {
                 }
             }
 
-            if ($best_score >= $threshold) {
-                wp_redirect(get_permalink($best_match), 301);
-                exit;
+            if ($best_score >= $threshold && $best_match) {
+                $url = get_permalink($best_match);
+                if ($url && strpos($url, home_url()) === 0) {
+                    wp_redirect($url, 301);
+                    exit;
+                }
             }
         }
 
         if (function_exists('r4mp_is_pro_active') && r4mp_is_pro_active()) {
             $custom_404 = esc_url(get_option('r4mp_custom_404_url', ''));
-            if (!empty($custom_404)) {
+            if (!empty($custom_404) && strpos($custom_404, home_url()) === 0) {
                 wp_redirect($custom_404, 302);
                 exit;
             }
         }
     }
-}
 
-if (!function_exists('r4mp_get_potential_matches')) {
     function r4mp_get_potential_matches($slug_fragment) {
         global $wpdb;
 
