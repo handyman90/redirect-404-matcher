@@ -1,103 +1,81 @@
-# 🔁 404 Redirect Matcher Pro
+# 404 Redirect Matcher Pro
 
-Automatically redirect 404 errors to the closest matching post or page using smart slug similarity.
-Pro features include broken image fallback, custom 404 redirection, and license key activation.
+Smart 404 handling for WordPress — automatically redirects visitors from broken URLs to the closest matching post or page.
 
----
-
-## ✨ Features
-
-### ✅ Free Features
-
-* 🔄 Redirects 404s to the most similar post/page by slug.
-* 🧠 Smart partial matching using `similar_text()`.
-* 📂 Match across selected post types (posts, pages, CPTs).
-* ⚙️ Admin settings panel in WordPress dashboard.
-
-### 🔐 Pro Features (Requires License Key)
-
-* 🖼️ Replace broken image URLs with a default fallback.
-* 🚧 Custom 404 redirect when no match is found.
-* 🔑 License key activation panel.
+**Pro features include:**
+- Custom fallback 404 URL
+- Default image replacement for missing media
+- License-ready structure (currently dummy)
 
 ---
 
-## 📦 Installation
+## 🚀 Features
 
-1. Download or clone the repository:
-
-   ```bash
-   git clone https://github.com/handyman90/redirect-404-matcher.git
-   ```
-
-2. Upload the plugin folder to your WordPress plugins directory:
-
-   ```
-   /wp-content/plugins/redirect-404-matcher/
-   ```
-
-3. Activate the plugin from **Plugins > Installed Plugins** in your WordPress admin.
-
-4. Go to **Settings > 404 Redirect Matcher** to configure.
+- Redirect 404s to the closest matching content by URL similarity.
+- Configurable post types (e.g. post, page, custom types).
+- Custom fallback 404 page (Pro).
+- Default image URL replacement for broken `<img>` links (Pro).
+- Settings accessible **only to site admins**.
+- Compatible with **multisite environments**.
+- Built with security best practices.
 
 ---
 
-## ⚙️ How It Works
+## 🛠 Installation
 
-* Intercepts all 404 requests using `template_redirect`.
-* Extracts last part(s) of the URL and compares them to existing post slugs.
-* Uses `similar_text()` to find the best match.
-* Redirects to the closest post/page using a 301 redirect.
-* If no match exceeds threshold:
-
-  * \[Free] Do nothing (default 404).
-  * \[Pro] Redirect to custom 404 page (302).
-* Replaces broken images with a default fallback (Pro only).
+1. Upload the plugin to your WordPress `/wp-content/plugins/` directory.
+2. Activate the plugin through the “Plugins” menu in WordPress.
+3. Go to **Admin → 404 Redirect Matcher** to configure.
 
 ---
 
-## 🔑 Demo License Key
+## 🔧 Usage
 
-Use this key to unlock Pro features for testing or development:
-
-```
-12345678
-```
-
-You can modify the license logic inside `r4mp_is_pro_active()` in `settings.php`.
+- Enable redirect matching.
+- Select the post types to match against.
+- (Optional) Enter a fallback 404 page URL or image replacement (Pro).
 
 ---
 
-## 📁 File Structure
+## 🧪 Multisite Support
 
-```plaintext
-redirect-404-matcher/
-├── redirect-404-matcher.php   # Main plugin logic
-├── settings.php               # Admin UI and Pro settings
-├── README.md                  # This file
-```
+If the plugin is **network-activated**, settings are shared across all sites using WordPress site options.  
+Otherwise, settings are stored per-site.
 
 ---
 
-## 🧠 Developer Notes
+## 🔐 Security
 
-* Built with plain PHP and WordPress APIs (no frameworks).
-* Fully compatible with WordPress 5.x – 6.x+.
-* Easily extensible: license server, logging, matching algorithm, etc.
-* No JavaScript dependencies (only optional JS for image fallback).
+This plugin uses:
+
+- `current_user_can()` to restrict settings to administrators.
+- Proper sanitization of all inputs via `register_setting()`.
+- Output escaping of all settings content.
+- Redirect loop prevention.
+- Limited redirect match scope (3 path segments max, 10 results per fragment).
+
+📄 See [SECURITY.md](./SECURITY.md) for full details.
 
 ---
 
-## 👨‍👷️ Author
+## 👨‍💻 Author
 
-**Handyman**
-🌐 Website: [https://zhrventure.com](https://zhrventure.com)
+Developed by **Handyman**  
+🔗 [https://zhrventure.com](https://zhrventure.com)
+
+---
+
+## 📬 Feedback
+
+We’d love to hear your thoughts!
+
+💡 Have ideas or issues?  
+📧 Email: [dev@zhrventure.com](mailto:dev@zhrventure.com)
 
 ---
 
 ## 📄 License
 
-This plugin is licensed under the **GNU General Public License v2.0 or later**.
+GPL v2.0 or later  
+See [`LICENSE`](./LICENSE) for full terms.
 
-> You can redistribute it and/or modify it under the terms of the GPL as published by the Free Software Foundation.
-> See the full license: [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
