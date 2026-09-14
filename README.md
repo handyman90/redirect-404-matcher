@@ -1,22 +1,35 @@
-# 404 Redirect Matcher Pro
+# Redirect 404 Matcher (1.4.0)
 
-Smart 404 handling for WordPress — automatically redirects visitors from broken URLs to the closest matching post or page.
+Lightweight automatic 404 fixer with no logs or tracking — the alternative to heavy managers and homepage-dump plugins.
 
-**Pro features include:**
-- Custom fallback 404 URL
-- Default image replacement for missing media
-- License-ready structure (currently uses a demo key)
+**How it resolves a 404 (in order):**
+1. Manual overrides (`/old-path /new-path`, max 50, exact match)
+2. Renamed posts (old slug auto-tracked → 301, max 200)
+3. Removed content (trashed slug → 410 Gone, opt-out available)
+4. Smart match (similar-text + typo score ≥55 → 301)
+5. Custom 404 fallback (same-site 302) or native 404
+
+**Free features in WordPress.org version:**
+- Smart slug + typo matching (301, same-site only)
+- Renamed-post auto-redirects + 410 handling
+- Manual overrides + custom fallback 404 URL
+- Default image replacement for missing media (same-site only)
+- No license key, no logs, no tracking required
 
 ---
 
 ## 🚀 Features
 
-- Redirect 404s to the closest matching content by URL similarity.
+- Redirect 404s to the closest matching content by URL similarity + typo tolerance (301).
+- Renamed-post tracking and 410 Gone for trashed content (SEO-correct, no soft-404s).
+- Manual overrides for migrations without building a full rule table.
+- Excludes admin / feeds / sitemaps / wp-json / probes — scanners never get redirected.
 - Configurable post types (e.g. post, page, custom types).
-- Custom fallback 404 page (Pro).
-- Default image URL replacement for broken `<img>` links (Pro).
-- Settings accessible **only to site admins**.
-- Compatible with **multisite environments**.
+- Custom fallback 404 page (302, same-site only).
+- Default image URL replacement for broken `<img>` links (same-site only).
+- Settings under **Settings → 404 Redirect Matcher**, accessible **only to admins** (`manage_options`).
+- Per-site settings, compatible with **multisite environments**.
+- No external requests, no tracking, no bundled third-party libraries.
 - Built with security best practices.
 
 ---
@@ -25,7 +38,7 @@ Smart 404 handling for WordPress — automatically redirects visitors from broke
 
 1. Upload the plugin to your WordPress `/wp-content/plugins/` directory.
 2. Activate the plugin through the “Plugins” menu in WordPress.
-3. Go to **Admin → 404 Redirect Matcher** to configure.
+3. Go to **Settings → 404 Redirect Matcher** to configure.
 
 ---
 
@@ -33,28 +46,13 @@ Smart 404 handling for WordPress — automatically redirects visitors from broke
 
 - Enable redirect matching.
 - Select the post types to match against.
-- (Pro) Enter a fallback 404 page URL or default image URL.
-- (Pro) Activate using the demo license key below.
-
----
-
-## 🔑 Demo License Key
-
-This version includes basic Pro features for demo/testing.  
-To enable Pro-only settings, use this demo license key:
-
-12345678
-
-
-> 🔐 This key is a placeholder and does not connect to any external validation service.  
-> Future releases may use secure validation for official licenses.
+- Optionally enter a same-site fallback 404 page URL and default image URL.
 
 ---
 
 ## 🧪 Multisite Support
 
-If the plugin is **network-activated**, settings are shared across all sites using WordPress site options.  
-If activated per site, each site stores its own configuration.
+Each site stores its own configuration via standard options. Network activation is supported; settings remain per-site so the Settings API save/load always matches.
 
 ---
 
@@ -62,11 +60,14 @@ If activated per site, each site stores its own configuration.
 
 This plugin uses:
 
-- `current_user_can()` to restrict settings to administrators.
-- Proper sanitization of all inputs via `register_setting()`.
-- Output escaping of all settings content.
+- `current_user_can('manage_options')` to restrict settings to administrators (menu + page callback).
+- Proper sanitization of all inputs via `register_setting()` (`absint`, whitelisted `sanitize_key` post types, `esc_url_raw`).
+- Output escaping (`esc_attr`, `esc_html`, `esc_url`) and `wp_json_encode` for inline JS.
+- `wp_safe_redirect()` + same-site checks to prevent open redirects.
+- Fully prepared SQL with `$wpdb->prepare()` + `$wpdb->esc_like()`.
 - Redirect loop prevention.
 - Limited redirect match scope (3 path segments max, 10 results per fragment).
+- Enqueued inline script via `wp_add_inline_script()` instead of raw `echo`.
 
 📄 See [SECURITY.md](./SECURITY.md) for full details.
 
@@ -74,8 +75,8 @@ This plugin uses:
 
 ## 👨‍💻 Author
 
-Developed by **Handyman**  
-🔗 [https://zhrventure.com](https://zhrventure.com)
+Developed by **ZHR Venture**
+🔗 [https://zhrventure.com/404-redirect-matcher/](https://zhrventure.com/404-redirect-matcher/)
 
 ---
 
@@ -83,7 +84,7 @@ Developed by **Handyman**
 
 We’d love to hear your thoughts!
 
-💡 Have ideas or issues?  
+💡 Have ideas or issues?
 📧 Email: [dev@zhrventure.com](mailto:dev@zhrventure.com)
 
 Appreciate any feedback or ideas for improvements!
@@ -92,5 +93,5 @@ Appreciate any feedback or ideas for improvements!
 
 ## 📄 License
 
-GPL v2.0 or later  
+GPL v2.0 or later
 See [`LICENSE`](./LICENSE) for full terms.
